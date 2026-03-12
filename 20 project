@@ -1,0 +1,46 @@
+import json
+vault_file = "vault.json"
+def load_vault():
+    try:
+        with open(vault_file, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+def save_vault(data):
+    with open(vault_file, "w") as file:
+        json.dump(data, file)
+def add_password(vault):
+    site = input("Enter site name: ").lower()
+    username = input("Ënter username: ")
+    password = input("Enter password: ")
+    vault[site] = {
+        "username": username,
+        "password": password
+   }
+    save_vault(vault)
+    print("password saved successfullly!")
+def view_password(vault):
+    site = input("Enter site name: ").lower()
+    if site in vault:
+        print("Username:", vault[site]["username"])
+        print("Password:", vault[site]["password"])
+    else:
+        print("No record found for this site.")
+def main():
+    vault = load_vault()
+    while True:
+        print("\n--- Password Vault ---")
+        print("1. Add Password")
+        print("2. View Password")
+        print("3. Exit")
+        choice = input("Choose option: ")
+        if choice == "1":
+            add_password(vault)
+        elif choice == "2":
+            view_password(vault)
+        elif choice == "3":
+            print("Goodbye. Stay secure.")
+            break
+        else:
+            print("Invalid option.")
+main()
